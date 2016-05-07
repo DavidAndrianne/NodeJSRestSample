@@ -17,14 +17,14 @@ var dbCnnStr = 'mongodb://127.0.0.1:27017/test';
 my_http.createServer(function(request,response){
 	console.log("received request!");
     
-	response.write("<h1>RestApi/Markers/GET</h1>");
-	response.write("Todo: pass DB result back to main thread so write in both console AND the response...");
+	/*response.write("<h1>RestApi/Markers/GET</h1>");
+	response.write("Todo: pass DB result back to main thread so write in both console AND the response...");*/
 	
 	// init the connection
 	mongoose.connect(dbCnnStr);
 	var db = mongoose.connection;
 	db.on('error', console.error.bind(console, 'connection error:'));
-	db.once('open', function(request, response) {
+	db.once('open', function() {
 	  // we're connected!
 		var markerSchema = mongoose.Schema({
 			lat: Number,
@@ -46,7 +46,10 @@ my_http.createServer(function(request,response){
 			if (err) return console.error(err);
 			console.log("Found markers in localhost mongo DB test.Markers:");
 			console.log(markers);
-			//console.log(markers[0].getDistFromAalst());
+			markers.forEach( function(marker) {
+                response.write(JSON.stringify(marker));
+            });
+			response.end();
 		  })
 	});
 	
