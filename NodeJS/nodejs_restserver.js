@@ -50,6 +50,7 @@ my_http.createServer(function(request,response){
                 response.write(JSON.stringify(marker));
             });
 			response.end();
+			mongoose.disconnect();
 		  })
 	});
 	

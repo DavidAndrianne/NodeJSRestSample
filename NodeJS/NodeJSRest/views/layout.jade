@@ -1,0 +1,21 @@
+doctype html
+html
+  head
+    title= title
+    link(rel='stylesheet', href='/stylesheets/style.css')
+    link(rel='stylesheet', href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css')
+    script(src='https://code.jquery.com/jquery-2.2.4.min.js')
+    script(src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js')
+  body
+    ul(class='nav nav-tabs')
+      li
+        a(href='/') Index
+      li
+        a(class='dropdown-toggle', data-toggle='dropdown', href='#', role='button', aria-haspopup='true', aria-expanded='false') Markers
+          span(class="caret")
+        ul(class='dropdown-menu')
+          li
+            a(href='/markers/create') Add
+          li
+            a(href='/markers/') Search
+    block content

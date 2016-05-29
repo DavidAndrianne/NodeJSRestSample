@@ -1,0 +1,18 @@
+extends layout
+
+block content
+  h1= title
+  p Welcome to #{title}
+  
+  h2 Documentation
+  
+  h3 Setup
+  pre // Please store shared variables in a config where all your controllers might access it <br/>var api = "http://94.224.32.37:24242/Markers";
+  
+  h3 Markers
+  
+  h4 Get all markers
+  pre // Get a dump of all markers<br/>$.ajax({ type: "GET", <br/>    contentType: "application/json", <br/>    url: api, <br/>    success: function(data){ alert(data); } <br/>});
+    
+  h4 Search for markers by a predicate
+  pre // Search for all markers in the layers 'Food' or 'Drink'<br/><b>var predicate = {layers:['food', 'drink']};</b><br/>$.ajax({ type: "GET", <br/>    contentType: "application/json", <br/>    <b>data: JSON.stringify(predicate)</b> <br/>    url: api, <br/>    success: function(data){ alert(data); } <br/>});
