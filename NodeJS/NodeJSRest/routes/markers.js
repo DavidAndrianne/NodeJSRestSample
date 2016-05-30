@@ -79,7 +79,7 @@ router.put('/:marker_id', function(req, res){
   }); // end findById
 });
 
-/* Update marker */
+/* Update marker for GUI */
 router.post('/:marker_id', function(req, res){
   Marker.findById(req.params.marker_id, function (err, marker) {
 	var markerToUpdate = extractMarkerFromRequest(marker, req);
@@ -88,7 +88,10 @@ router.post('/:marker_id', function(req, res){
 	markerToUpdate.save(function(err){
 	  if(err)
 		res.send(err);
-	  res.json(markerToUpdate);
+	  res.writeHead(302, {
+	    'Location': '/markers/search'
+	  });
+	  res.end();
 	});// end save
   }); // end findbyId
 });
@@ -104,13 +107,18 @@ router.delete('/:marker_id', function(req, res){
 	});
 });
 
+/* DELETE marker for GUI */
 router.get('/:marker_id/delete', function(req, res){
   Marker.remove({
 		_id: req.params.marker_id
 	}, function(err, marker) {
 		if (err)
 			res.send(err);
-		res.json({ message: 'Successfully deleted marker '+req.params.marker_id+'!' });
+		//res.json({ message: 'Successfully deleted marker '+req.params.marker_id+'!' });
+		res.writeHead(302, {
+		  'Location': '/markers/search'
+		});
+		res.end();
 	});
 });
 
