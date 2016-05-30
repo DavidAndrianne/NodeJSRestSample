@@ -1,0 +1,24 @@
+extends layout
+
+block content
+  h1 Markers overview
+  table(class='table table-hover')
+    tr
+      th lat
+      th lng
+      th title
+      th type
+      th layers
+      th actions
+    each marker in markers
+      tr
+        td #{marker.lat}
+        td #{marker.lng}
+        td #{marker.title}
+        td #{marker.meta.type}
+        td #{marker.meta.layers}
+        td
+          a(href='/markers/'+marker._id+'/update', class='btn btn-primary btn-xs')
+            span(class='glyphicon glyphicon-pencil')
+          a(href='/markers/'+marker._id+'/delete', class='btn btn-danger btn-xs')
+            span(class='glyphicon glyphicon-trash')

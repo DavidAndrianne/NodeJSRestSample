@@ -1,21 +1,20 @@
 extends layout
 
 block content
-  h1 Add a new marker
   form(method='post', action='/markers', class='form-horizontal')
     div(class='form group')
       label(for='lat', class='control-label col-sm-2') lat 
         a(href='https://www.doogal.co.uk/LatLong.php') ?
       div(class='col-sm-10')
-        input(required="", type='text', name='lat', placeholder='50.8333', class='form-control')
+        input(type='text', name='lat', placeholder='50.8333', class='form-control')
       label(for='lng', class='control-label col-sm-2') lng
         a(href='https://www.doogal.co.uk/LatLong.php') ?
       div(class='col-sm-10')
-        input(required="", type='text', name='lng', placeholder='4.0333', class='form-control')
+        input(type='text', name='lng', placeholder='4.0333', class='form-control')
     div(class='form group')
       label(for='title', class='control-label col-sm-2') title
       div(class='col-sm-10')
-        input(required="", type='text', name='title', placeholder="Joe's hotdog stand", class='form-control')
+        input(type='text', name='title', placeholder="Joe's hotdog stand", class='form-control')
     div(class='form group')
       label(for='type', class='control-label col-sm-2') type
       div(class='col-sm-10')
@@ -28,12 +27,26 @@ block content
     div(class='form group')
       label(for='layers', class='control-label col-sm-2') layers
       div(class='col-sm-10')
-        select(required="", name='layers', class='form-control', multiple='')
-          option(value='food' selected='true') food
-          option(value='drink') drink
-          option(value='entertainment') entertainment
-          option(value='transport') transport
-          option(value='toilet') toilet
+        div.checkbox
+          label
+            input(type='checkbox', value='Food', name ='layers', checked=true)
+            span Food
+        div.checkbox
+          label 
+            input(type='checkbox', value='Drink', name ='layers')
+            span Drink
+        div.checkbox
+          label
+            input(type='checkbox', value='Entertainment', name ='layers')
+            span Entertainment
+        div.checkbox
+          label 
+            input(type='checkbox', value='Transport', name ='layers')
+            span Transport
+        div.checkbox
+          label 
+            input(type='checkbox', value='Toilet', name ='layers')
+            span Toilet
     div(class='form group')
       div(class='col-sm-8')
         input(type='submit', value='Submit', class='btn btn-default')

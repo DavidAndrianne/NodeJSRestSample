@@ -11,13 +11,23 @@ var db = mongoose.connection;
 
 // Render page to create a new marker
 router.get('/create', function(req, res, next){
-  res.render('marker_create');
+  res.render('marker_create', {title:'Add marker'});
 });
 
 // Render page to update a marker
-router.get('/update', function(req, res, next){
-  res.send("WIP!");
-  //res.render('marker_update');
+router.get('/:marker_id/update', function(req, res, next){
+  Marker.findById(req.params.marker_id, function (err, marker) {
+	if (err) return console.error(err);
+	console.log(marker);
+	res.render('marker_update', {title:'Update marker', marker: marker});
+  }); // end find
+});
+
+// Render page to search for markers
+router.get('/search', function(req, res, next){
+  Marker.find(function(err, allMarkers){
+	res.render('marker_search', {title:'Search markers', markers: allMarkers});
+  });
 });
 
 // *** API section ***
@@ -44,31 +54,63 @@ router.get('/:marker_id', function(req, res, next) {
 /* POST new marker. */
 router.post('/', function(req, res) {
   var markerToAdd = extractMarkerFromRequest(new Marker(), req);
-  markerToAdd.save(function(err){
-	if(err)
-	  res.send(err);
-	res.json(markerToAdd);
-  }); // end save
+  if (!markerToAdd.meta.layers) {
+    res.send('Validation Error! Must at least display marker on a single layer!');
+  } else {
+	markerToAdd.save(function(err){
+	  if(err)
+		res.send(err);
+	  res.json(markerToAdd);
+	}); // end save
+  }
 });
 
-/* PUT updated marker */
+/* PUT updated marker
+ * NOTE : (Temporarily?) also listening to POST /:marker_id to sustain GUI version
+ */
 router.put('/:marker_id', function(req, res){
-  var markerToAdd = extractMarkerFromRequest(new Marker(), req);
-  markerToAdd.save(function(err){
-	if(err)
-	  res.send(err);
-	res.json(markerToAdd);
-  });// end save
+  Marker.findById(req.params.marker_id, function (err, marker) {
+    var markerToUpdate = extractMarkerFromRequest(marker, req);
+    markerToUpdate.save(function(err){
+	  if(err)
+	    res.send(err);
+	  res.json(markerToUpdate);
+    });// end save
+  }); // end findById
+});
+
+/* Update marker */
+router.post('/:marker_id', function(req, res){
+  Marker.findById(req.params.marker_id, function (err, marker) {
+	var markerToUpdate = extractMarkerFromRequest(marker, req);
+	console.log("updating marker"+markerToUpdate._id);
+	console.log(markerToUpdate);
+	markerToUpdate.save(function(err){
+	  if(err)
+		res.send(err);
+	  res.json(markerToUpdate);
+	});// end save
+  }); // end findbyId
 });
 
 /* DELETE marker */
 router.delete('/:marker_id', function(req, res){
   Marker.remove({
 		_id: req.params.marker_id
-	}, function(err, bear) {
+	}, function(err, marker) {
 		if (err)
 			res.send(err);
-		res.json({ message: 'Successfully deleted marker '+marker_id+'!' });
+		res.json({ message: 'Successfully deleted marker '+req.params.marker_id+'!' });
+	});
+});
+
+router.get('/:marker_id/delete', function(req, res){
+  Marker.remove({
+		_id: req.params.marker_id
+	}, function(err, marker) {
+		if (err)
+			res.send(err);
+		res.json({ message: 'Successfully deleted marker '+req.params.marker_id+'!' });
 	});
 });
 
@@ -76,8 +118,8 @@ router.delete('/:marker_id', function(req, res){
 /* Extract a marker object from a request and insert it into an obj */
 function extractMarkerFromRequest(obj, req) {
     var marker = obj;
-	if (req.params._id)
-        marker._id=req.params._id;
+	//if (req.params._id)
+        //marker._id=req.params._id;
 	if (req.body.lat)
 	  marker.lat = req.body.lat;
 	if (req.body.lng)

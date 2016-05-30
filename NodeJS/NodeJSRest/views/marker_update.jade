@@ -1,0 +1,75 @@
+extends layout
+
+block content
+  h1 Update marker #{marker._id}
+  form(method='post', action='/markers/' + marker._id, class='form-horizontal')
+    div(class='form group')
+      label(for='lat', class='control-label col-sm-2') lat 
+        a(href='https://www.doogal.co.uk/LatLong.php') ?
+      div(class='col-sm-10')
+        input(required="", type='text', name='lat', placeholder='50.8333', class='form-control', value=marker.lat)
+      label(for='lng', class='control-label col-sm-2') lng
+        a(href='https://www.doogal.co.uk/LatLong.php') ?
+      div(class='col-sm-10')
+        input(required="", type='text', name='lng', placeholder='4.0333', class='form-control', value=marker.lng)
+    div(class='form group')
+      label(for='title', class='control-label col-sm-2') title
+      div(class='col-sm-10')
+        input(required="", type='text', name='title', placeholder="Joe's hotdog stand", class='form-control', value=marker.title)
+    div(class='form group')
+      label(for='type', class='control-label col-sm-2') type
+      div(class='col-sm-10')
+        label street
+        input(type='radio' name='type' value='street', checked=marker.meta.type=='street')
+        label stand
+        input(type='radio' name='type' value='stand', checked=marker.meta.type=='stand')
+        label building
+        input(type='radio' name='type' value='building', checked=marker.meta.type=='building')
+    div(class='form group')
+      label(for='layers', class='control-label col-sm-2') layers
+      div(class='col-sm-10')
+        if marker.meta.layers.indexOf
+          div.checkbox
+            label
+              input(type='checkbox', value='Food', name ='layers', checked=marker.meta.layers.indexOf('Food')>-1)
+              span Food
+          div.checkbox
+            label 
+              input(type='checkbox', value='Drink', name ='layers', checked=marker.meta.layers.indexOf('Drink')>-1)
+              span Drink
+          div.checkbox
+            label
+              input(type='checkbox', value='Entertainment', name ='layers', checked=marker.meta.layers.indexOf('Entertainment')>-1)
+              span Entertainment
+          div.checkbox
+            label 
+              input(type='checkbox', value='Transport', name ='layers', checked=marker.meta.layers.indexOf('Transport')>-1)
+              span Transport
+          div.checkbox
+            label 
+              input(type='checkbox', value='Toilet', name ='layers', checked=marker.meta.layers.indexOf('Toilet')>-1)
+              span Toilet
+        else
+          div.checkbox
+            label
+              input(type='checkbox', value='Food', name ='layers', checked=marker.meta.layers == 'Food')
+              span Food
+          div.checkbox
+            label 
+              input(type='checkbox', value='Drink', name ='layers', checked=marker.meta.layers == 'Drink')
+              span Drink
+          div.checkbox
+            label
+              input(type='checkbox', value='Entertainment', name ='layers', checked=marker.meta.layers == 'Entertainment')
+              span Entertainment
+          div.checkbox
+            label 
+              input(type='checkbox', value='Transport', name ='layers', checked=marker.meta.layers == 'Transport')
+              span Transport
+          div.checkbox
+            label 
+              input(type='checkbox', value='Toilet', name ='layers', checked=marker.meta.layers == 'Toilet')
+              span Toilet
+    div(class='form group')
+      div(class='col-sm-8')
+        input(type='submit', value='Submit', class='btn btn-default')
