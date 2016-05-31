@@ -2,7 +2,7 @@ extends layout
 
 block content
   h1 Update marker #{marker._id}
-  form(method='post', action='/markers/' + marker._id, class='form-horizontal')
+  form(method='post', action='/markers/'+marker._id+'/update/', class='form-horizontal')
     div(class='form group')
       label(for='lat', class='control-label col-sm-2') lat 
         a(href='https://www.doogal.co.uk/LatLong.php') ?
