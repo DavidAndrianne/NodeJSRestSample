@@ -8,8 +8,10 @@ block content
       div(class='form group')
       label(for='type', class='control-label col-sm-2') type
       div(class='col-sm-10')
+        label N/a
+        input(type='radio' name='type' value='na' checked='true')
         label street
-        input(type='radio' name='type' value='street' checked='true')
+        input(type='radio' name='type' value='street')
         label stand
         input(type='radio' name='type' value='stand')
         label building
@@ -61,3 +63,5 @@ block content
             span(class='glyphicon glyphicon-pencil')
           a(href='/markers/'+marker._id+'/delete', class='btn btn-danger btn-xs')
             span(class='glyphicon glyphicon-trash')
+  a(href='/markers/create', class='btn btn-default')
+    span(class='glyphicon glyphicon-plus')

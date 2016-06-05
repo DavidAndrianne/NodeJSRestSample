@@ -34,7 +34,8 @@ router.get('/search', function(req, res, next){
 
 /* REST: GET markers listing. */
 router.get('/', function(req, res, next) {
-  var predicate = extractMarkerFromRequest({}, req);
+  var markerToMatch = extractMarkerFromRequest({}, req);
+  var predicate = generateOrPredicate(markerToMatch);
   Marker.find(predicate, function (err, markers) {
 	  if (err) return console.error(err);
 	  res.json(markers);
@@ -90,8 +91,8 @@ router.delete('/:marker_id', function(req, res){
 
 /* GUI: GET Markers listing. */
 router.post('/search', function(req, res, next){
-    var predicate = extractMarkerFromRequest({}, req);
-	console.log(predicate);
+    var markerToMatch = extractMarkerFromRequest({}, req);
+	var predicate = generateOrPredicate(markerToMatch);
     Marker.find(predicate, function (err, foundMarkers) {
 	  if (err) return console.error(err);
 	  res.render('marker_search', {title:'Search markers', markers: foundMarkers});
@@ -191,5 +192,30 @@ function validateMarker(marker, res) {
 	res.send('Validation Error! Marker must have a marker type in order to be displayed to the user!');
   }
   return isValid;
+}
+
+/* Transforms a Marker object into a mongoDB "OR" predicate
+ * returns "queryobject" where if either of the fields matches the markers will be returned
+ */
+function generateOrPredicate(marker) {
+  var orPredicate = {$or: []};
+  for(var prop in marker) {
+	  var newOrStatement = {};
+      if (marker.hasOwnProperty(prop)) {
+		if (marker[prop].toString() == "[object Object]") { //if subdocument, then navigate through each subproperty
+            for(var subProp in marker[prop]) {
+			  if (marker[prop].hasOwnProperty(subProp)) {
+				//console.log('adding '+prop+'.'+subProp+':'+marker[prop][subProp]);
+				newOrStatement[prop+'.'+subProp] = marker[prop][subProp];
+			  }
+			}
+        } else {
+		  //console.log('adding '+prop+':'+marker[prop]);
+		  newOrStatement[prop] = marker[prop];
+		}
+      }
+	  orPredicate.$or.push(newOrStatement);
+   }
+   return orPredicate;
 }
 module.exports = router;
